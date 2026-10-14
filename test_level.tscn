@@ -1,8 +1,8 @@
 [gd_scene format=3 uid="uid://pj0jq5yw7n8l"]
 
 [ext_resource type="Script" uid="uid://di7lufebwfcmf" path="res://addons/scene_map/scene_map.gd" id="1"]
-[ext_resource type="MeshLibrary" path="res://test_mesh_library.tres" id="2"]
-[ext_resource type="Resource" path="res://test_scene_palette.tres" id="3"]
+[ext_resource type="MeshLibrary" uid="uid://5s2fwd0hu56e" path="res://test_mesh_library.tres" id="2"]
+[ext_resource type="Resource" path="res://test_scene_palette.tres" id="3_y646j"]
 [ext_resource type="PackedScene" path="res://tiles/floor_tile.tscn" id="4"]
 [ext_resource type="PackedScene" path="res://tiles/block_tile.tscn" id="5"]
 [ext_resource type="PackedScene" uid="uid://baagc1mix2la6" path="res://tiles/fire_tile.tscn" id="6"]
@@ -18,115 +18,179 @@ data = {
 
 [node name="SceneMap" type="Node3D" parent="." unique_id=696092525]
 script = ExtResource("1")
-palette = ExtResource("3")
+palette = ExtResource("3_y646j")
+layers/0/size = Vector3(2, 2, 2)
+layers/0/center_x = true
+layers/0/center_y = true
+layers/0/center_z = true
+layers/0/cell_map = null
+layers/1/size = Vector3(2, 2, 2)
+layers/1/center_x = true
+layers/1/center_y = true
+layers/1/center_z = true
+layers/1/cell_map = null
 
-[node name="Floor7" parent="SceneMap" unique_id=191905742 instance=ExtResource("4")]
+[node name="Floor" parent="SceneMap" unique_id=1107565584 instance=ExtResource("4")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13, 1, 7)
 
-[node name="Floor8" parent="SceneMap" unique_id=1297449096 instance=ExtResource("4")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15, 1, 7)
-
-[node name="Floor9" parent="SceneMap" unique_id=202770609 instance=ExtResource("4")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17, 1, 7)
-
-[node name="Floor12" parent="SceneMap" unique_id=1017261815 instance=ExtResource("4")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17, 1, 5)
-
-[node name="Floor14" parent="SceneMap" unique_id=1728978646 instance=ExtResource("4")]
+[node name="Floor2" parent="SceneMap" unique_id=396092798 instance=ExtResource("4")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13, 1, 5)
 
-[node name="Floor17" parent="SceneMap" unique_id=1421092124 instance=ExtResource("4")]
+[node name="Floor3" parent="SceneMap" unique_id=443726565 instance=ExtResource("4")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13, 1, 3)
 
-[node name="Floor18" parent="SceneMap" unique_id=224032557 instance=ExtResource("4")]
+[node name="Floor4" parent="SceneMap" unique_id=452376774 instance=ExtResource("4")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15, 1, 3)
 
-[node name="Floor19" parent="SceneMap" unique_id=281444020 instance=ExtResource("4")]
+[node name="Floor5" parent="SceneMap" unique_id=1241676315 instance=ExtResource("4")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17, 1, 3)
 
-[node name="Block" parent="SceneMap" unique_id=1712851775 instance=ExtResource("5")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19, 1, 9)
+[node name="Floor6" parent="SceneMap" unique_id=1586326337 instance=ExtResource("4")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17, 1, 5)
 
-[node name="Block2" parent="SceneMap" unique_id=365863726 instance=ExtResource("5")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19, 1, 7)
+[node name="Floor7" parent="SceneMap" unique_id=1995024400 instance=ExtResource("4")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17, 1, 7)
 
-[node name="Block3" parent="SceneMap" unique_id=174091310 instance=ExtResource("5")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19, 1, 5)
+[node name="Floor8" parent="SceneMap" unique_id=1251817061 instance=ExtResource("4")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15, 1, 7)
 
-[node name="Block4" parent="SceneMap" unique_id=356793577 instance=ExtResource("5")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19, 1, 3)
-
-[node name="Block5" parent="SceneMap" unique_id=1484514786 instance=ExtResource("5")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19, 1, 1)
-
-[node name="Block6" parent="SceneMap" unique_id=1321666815 instance=ExtResource("5")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17, 1, 1)
-
-[node name="Block7" parent="SceneMap" unique_id=1619129533 instance=ExtResource("5")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15, 1, 1)
-
-[node name="Block8" parent="SceneMap" unique_id=420911206 instance=ExtResource("5")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13, 1, 1)
-
-[node name="Block9" parent="SceneMap" unique_id=557024971 instance=ExtResource("5")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11, 1, 1)
-
-[node name="Block10" parent="SceneMap" unique_id=1680672964 instance=ExtResource("5")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11, 1, 3)
-
-[node name="Block11" parent="SceneMap" unique_id=915904066 instance=ExtResource("5")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11, 1, 5)
-
-[node name="Block12" parent="SceneMap" unique_id=2017963716 instance=ExtResource("5")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11, 1, 7)
-
-[node name="Block13" parent="SceneMap" unique_id=1344662499 instance=ExtResource("5")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11, 1, 9)
-
-[node name="Block14" parent="SceneMap" unique_id=1122286793 instance=ExtResource("5")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13, 1, 9)
-
-[node name="Block15" parent="SceneMap" unique_id=1095933890 instance=ExtResource("5")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15, 1, 9)
-
-[node name="Block16" parent="SceneMap" unique_id=306519518 instance=ExtResource("5")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17, 1, 9)
-
-[node name="Fire Floor" parent="SceneMap" unique_id=38259473 instance=ExtResource("6")]
+[node name="Fire Floor" parent="SceneMap" unique_id=2044379638 instance=ExtResource("6")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15, 1, 5)
 
-[node name="Triangle" parent="SceneMap" unique_id=847795534 instance=ExtResource("7")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11, 1, 11)
+[node name="Block" parent="SceneMap" unique_id=1766813901 instance=ExtResource("5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11, 1, 1)
 
-[node name="Triangle2" parent="SceneMap" unique_id=246956045 instance=ExtResource("7")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15, 1, 11)
+[node name="Block2" parent="SceneMap" unique_id=614317590 instance=ExtResource("5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13, 1, 1)
 
-[node name="Triangle3" parent="SceneMap" unique_id=2032790914 instance=ExtResource("7")]
+[node name="Block3" parent="SceneMap" unique_id=1701389907 instance=ExtResource("5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15, 1, 1)
+
+[node name="Block4" parent="SceneMap" unique_id=200702228 instance=ExtResource("5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17, 1, 1)
+
+[node name="Block5" parent="SceneMap" unique_id=1466998083 instance=ExtResource("5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19, 1, 1)
+
+[node name="Block6" parent="SceneMap" unique_id=1240580620 instance=ExtResource("5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19, 1, 3)
+
+[node name="Block7" parent="SceneMap" unique_id=1612261747 instance=ExtResource("5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19, 1, 5)
+
+[node name="Block8" parent="SceneMap" unique_id=35154657 instance=ExtResource("5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19, 1, 7)
+
+[node name="Block9" parent="SceneMap" unique_id=1611255683 instance=ExtResource("5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19, 1, 9)
+
+[node name="Block10" parent="SceneMap" unique_id=187727498 instance=ExtResource("5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17, 1, 9)
+
+[node name="Block11" parent="SceneMap" unique_id=1268274636 instance=ExtResource("5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15, 1, 9)
+
+[node name="Block12" parent="SceneMap" unique_id=1095344620 instance=ExtResource("5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13, 1, 9)
+
+[node name="Block13" parent="SceneMap" unique_id=786007511 instance=ExtResource("5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11, 1, 9)
+
+[node name="Block14" parent="SceneMap" unique_id=817627547 instance=ExtResource("5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11, 1, 7)
+
+[node name="Block15" parent="SceneMap" unique_id=515720156 instance=ExtResource("5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11, 1, 5)
+
+[node name="Block16" parent="SceneMap" unique_id=1919946567 instance=ExtResource("5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11, 1, 3)
+
+[node name="Triangle" parent="SceneMap" unique_id=1829591684 instance=ExtResource("7")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19, 1, 11)
 
-[node name="Triangle4" parent="SceneMap" unique_id=1062177314 instance=ExtResource("7")]
-transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 21, 1, 9)
+[node name="Triangle2" parent="SceneMap" unique_id=2065721313 instance=ExtResource("7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15, 1, 11)
 
-[node name="Triangle5" parent="SceneMap" unique_id=617644550 instance=ExtResource("7")]
-transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 21, 1, 5)
+[node name="Triangle3" parent="SceneMap" unique_id=541247935 instance=ExtResource("7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11, 1, 11)
 
-[node name="Triangle6" parent="SceneMap" unique_id=1090290741 instance=ExtResource("7")]
-transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 21, 1, 1)
-
-[node name="Triangle7" parent="SceneMap" unique_id=864720125 instance=ExtResource("7")]
+[node name="Triangle4" parent="SceneMap" unique_id=1890037044 instance=ExtResource("7")]
 transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 19, 1, -1)
 
-[node name="Triangle8" parent="SceneMap" unique_id=553101648 instance=ExtResource("7")]
+[node name="Triangle5" parent="SceneMap" unique_id=1249566838 instance=ExtResource("7")]
 transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 15, 1, -1)
 
-[node name="Triangle9" parent="SceneMap" unique_id=48350440 instance=ExtResource("7")]
+[node name="Triangle6" parent="SceneMap" unique_id=397330413 instance=ExtResource("7")]
 transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 11, 1, -1)
 
-[node name="Triangle10" parent="SceneMap" unique_id=731801069 instance=ExtResource("7")]
+[node name="Triangle7" parent="SceneMap" unique_id=471103025 instance=ExtResource("7")]
 transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 9, 1, 1)
 
-[node name="Triangle11" parent="SceneMap" unique_id=1574041930 instance=ExtResource("7")]
+[node name="Triangle8" parent="SceneMap" unique_id=100990715 instance=ExtResource("7")]
 transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 9, 1, 5)
 
-[node name="Triangle12" parent="SceneMap" unique_id=759976556 instance=ExtResource("7")]
+[node name="Triangle9" parent="SceneMap" unique_id=1056439464 instance=ExtResource("7")]
 transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 9, 1, 9)
+
+[node name="Triangle10" parent="SceneMap" unique_id=39373338 instance=ExtResource("7")]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 21, 1, 9)
+
+[node name="Triangle11" parent="SceneMap" unique_id=1198676201 instance=ExtResource("7")]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 21, 1, 5)
+
+[node name="Triangle12" parent="SceneMap" unique_id=595222436 instance=ExtResource("7")]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 21, 1, 1)
+
+[node name="Block17" parent="SceneMap" unique_id=687487010 instance=ExtResource("5")]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 13, 1, 3)
+
+[node name="Block18" parent="SceneMap" unique_id=888275140 instance=ExtResource("5")]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 13, 1, 7)
+
+[node name="Block19" parent="SceneMap" unique_id=892679586 instance=ExtResource("5")]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 17, 1, 7)
+
+[node name="Block20" parent="SceneMap" unique_id=1937356062 instance=ExtResource("5")]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 17, 1, 3)
+
+[node name="Triangle13" parent="SceneMap" unique_id=1304423682 instance=ExtResource("7")]
+transform = Transform3D(0.7071068, 0, 0.7071067, 0, 1, 0, -0.7071067, 0, 0.7071068, 17, 1, 5)
+
+[node name="Triangle14" parent="SceneMap" unique_id=1295390439 instance=ExtResource("7")]
+transform = Transform3D(-0.7071067, 0, 0.7071067, 0, 1, 0, -0.7071067, 0, -0.7071067, 15, 1, 7)
+
+[node name="Triangle15" parent="SceneMap" unique_id=1798029587 instance=ExtResource("7")]
+transform = Transform3D(-0.7071067, 0, -0.7071067, 0, 1, 0, 0.7071067, 0, -0.7071067, 13, 1, 5)
+
+[node name="Triangle16" parent="SceneMap" unique_id=1534028678 instance=ExtResource("7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15, 1, 3)
+
+[node name="Floor9" parent="SceneMap" unique_id=1227511532 instance=ExtResource("4")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 21, 1, 1)
+
+[node name="Floor10" parent="SceneMap" unique_id=708551466 instance=ExtResource("4")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19, 1, 1)
+
+[node name="Floor11" parent="SceneMap" unique_id=1908722969 instance=ExtResource("4")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19, 1, -1)
+
+[node name="Floor12" parent="SceneMap" unique_id=2093089193 instance=ExtResource("4")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19, 1, 11)
+
+[node name="Floor13" parent="SceneMap" unique_id=653101369 instance=ExtResource("4")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19, 1, 9)
+
+[node name="Floor14" parent="SceneMap" unique_id=1183550852 instance=ExtResource("4")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 21, 1, 9)
+
+[node name="Floor16" parent="SceneMap" unique_id=928452259 instance=ExtResource("4")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11, 1, 5)
+
+[node name="Floor17" parent="SceneMap" unique_id=1824933018 instance=ExtResource("4")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11, 1, 11)
+
+[node name="Floor18" parent="SceneMap" unique_id=533480030 instance=ExtResource("4")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9, 1, 9)
+
+[node name="Floor15" parent="SceneMap" unique_id=515270810 instance=ExtResource("4")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15, 1, -1)

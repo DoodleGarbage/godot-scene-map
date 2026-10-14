@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.8] - 2026-10-14
+
+### Added
+
+- Layers for SceneMap, with individual cell sizes for each. Allows layering multiple scens on top of each other. Also features the ability to undo accidentally deleting a layer.
+
+### Changed
+
+- Use Godot 'Docks' instead of a control node added to the viewport, matching GirdMap's behavior
+
 ## [0.7] - 2026-10-13
 
 ### Changed

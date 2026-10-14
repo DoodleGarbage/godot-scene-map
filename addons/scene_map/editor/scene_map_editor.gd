@@ -1,5 +1,5 @@
 @tool
-extends Control
+extends EditorDock
 
 
 const SceneMap = preload("../scene_map.gd")
@@ -26,7 +26,9 @@ enum MenuOption {
 	EditAxis_Z,
 	Rotate_Clockwise,
 	Rotate_Counter_Clockwise,
-	Rotate_Reset
+	Rotate_Reset,
+	LayerUp,
+	LayerDown
 }
 
 
@@ -38,21 +40,24 @@ var cursor_rotation: Basis
 var edit_axis: int = Vector3.AXIS_Y
 var edit_floor: int = 0
 var edit_grid: MeshInstance3D
+var edit_layer : int = 0
 var selected_item_id: int = -1
 var current_input_action: int = InputAction.None
-var changed_items: Array = []
+var changed_items: Array[ChangeItem] = []
 var display_mode: int = PaletteDisplayMode.Thumbnail
 var search_text: String = ""
 
 
-@onready var palette_list := $Palette as ItemList
-@onready var no_palette_warning := $NoPaletteWarning as Label
-@onready var floor_label := $Toolbar/FloorLabel as Label
-@onready var floor_control := $Toolbar/FloorBox as SpinBox
-@onready var menu := $Toolbar/MenuButton as MenuButton
-@onready var search_box := $SearchBar/Search as LineEdit
-@onready var thumbnail_button := $SearchBar/Thumbnail as Button
-@onready var list_button := $SearchBar/List as Button
+@onready var palette_list := $Layout/Scroll/Palette as ItemList
+@onready var no_palette_warning := $Layout/NoPaletteWarning as Label
+@onready var floor_label := $Layout/Toolbar/FloorContainer/FloorLabel as Label
+@onready var floor_control := $Layout/Toolbar/FloorContainer/FloorBox as SpinBox
+@onready var layer_control := $Layout/Toolbar/LayerContainer/LayerBox as SpinBox
+@onready var menu := $Layout/Toolbar/MenuButton as MenuButton
+@onready var search_box := $Layout/SearchBar/Search as LineEdit
+@onready var thumbnail_button := $Layout/SearchBar/Thumbnail as Button
+@onready var list_button := $Layout/SearchBar/List as Button
+
 
 
 func _enter_tree() -> void:
@@ -76,7 +81,6 @@ func _ready() -> void:
 	
 	# Menu setup (can't be done in scene)
 	var menu_popup := menu.get_popup()
-	push_warning("Setting popup accelerators")
 	menu_popup.id_pressed.connect(_menu_option_selected)
 	menu_popup.set_item_accelerator(menu_popup.get_item_index(MenuOption.PreviousLevel), KEY_Q)
 	menu_popup.set_item_accelerator(menu_popup.get_item_index(MenuOption.NextLevel), KEY_E)
@@ -86,7 +90,8 @@ func _ready() -> void:
 	menu_popup.set_item_accelerator(menu_popup.get_item_index(MenuOption.Rotate_Clockwise), KEY_D)
 	menu_popup.set_item_accelerator(menu_popup.get_item_index(MenuOption.Rotate_Counter_Clockwise), KEY_A)
 	menu_popup.set_item_accelerator(menu_popup.get_item_index(MenuOption.Rotate_Reset), KEY_S)
-	push_warning("finished popping accelerators")
+	menu_popup.set_item_accelerator(menu_popup.get_item_index(MenuOption.LayerUp), KEY_R)
+	menu_popup.set_item_accelerator(menu_popup.get_item_index(MenuOption.LayerDown), KEY_F)
 
 
 func edit(p_scene_map: SceneMap) -> void:
@@ -99,6 +104,9 @@ func edit(p_scene_map: SceneMap) -> void:
 		
 		if scene_map.cell_center_changed.is_connected(_update_grid):
 			scene_map.cell_center_changed.disconnect(_update_grid)
+		
+		if scene_map.layer_removed.is_connected(_update_layer):
+			scene_map.layer_removed.disconnect(_update_layer)
 	
 	scene_map = p_scene_map
 	
@@ -112,13 +120,16 @@ func edit(p_scene_map: SceneMap) -> void:
 		if not scene_map.cell_center_changed.is_connected(_update_grid):
 			scene_map.cell_center_changed.connect(_update_grid)
 		
+		if not scene_map.layer_removed.is_connected(_update_layer):
+			scene_map.layer_removed.connect(_update_layer)
+		
 		_update_palette(scene_map.palette)
 	else:
 		_update_palette(null)
 
 
 func handle_spatial_input(camera: Camera3D, event: InputEvent) -> int:
-	if !scene_map || !scene_map.palette:
+	if !scene_map || !scene_map.palette || !scene_map.layers:
 		return EditorPlugin.AFTER_GUI_INPUT_PASS
 	
 	var undo_redo := plugin.get_undo_redo()
@@ -146,18 +157,17 @@ func handle_spatial_input(camera: Camera3D, event: InputEvent) -> int:
 		else:
 			if (click_event.button_index == MOUSE_BUTTON_LEFT && current_input_action == InputAction.Paint) \
 			|| (click_event.button_index == MOUSE_BUTTON_RIGHT && current_input_action == InputAction.Erase):
-				if not changed_items:
+				if changed_items:
 					var action := "SceneMap Paint" if current_input_action == InputAction.Paint else "SceneMap Erase"
 					undo_redo.create_action(action)
 					
 					for i in range(changed_items.size()):
-						var item := changed_items[i] as ChangeItem
-						undo_redo.add_do_method(scene_map, "set_cell_item", item.coordinates, item.new_item, item.new_orientation)
-						
-						item = changed_items[changed_items.size() - 1 - i] as ChangeItem
-						undo_redo.add_undo_method(scene_map, "set_cell_item", item.coordinates, item.old_item, item.old_orientation)
+						var item : ChangeItem = changed_items[i]
+						undo_redo.add_do_method(scene_map, "set_cell_item", item.coordinates, item.new_item, item.layer, item.new_orientation)
+						item = changed_items[changed_items.size() - 1 - i]
+						undo_redo.add_undo_method(scene_map, "set_cell_item", item.coordinates, item.old_item, item.layer, item.old_orientation)
 					
-					undo_redo.commit_action()
+					undo_redo.commit_action(false)
 					
 					changed_items = []
 					current_input_action = InputAction.None
@@ -187,7 +197,7 @@ func _handle_input(camera: Camera3D, point: Vector2) -> int:
 	
 	var plane := Plane()
 	plane.normal[edit_axis] = 1.0
-	plane.d = edit_floor * scene_map.cell_size[edit_axis]
+	plane.d = edit_floor * scene_map.layers[edit_layer].cell_size[edit_axis]
 	
 	var hit := plane.intersects_segment(from, normal * camera.far)
 	if !hit:
@@ -204,9 +214,9 @@ func _handle_input(camera: Camera3D, point: Vector2) -> int:
 		if i == edit_axis:
 			cell[i] = edit_floor
 		else:
-			cell[i] = floor(hit[i] / scene_map.cell_size[i])
+			cell[i] = floor(hit[i] / scene_map.layers[edit_layer].cell_size[i])
 	
-	cursor_origin = scene_map.get_cell_position(cell)
+	cursor_origin = scene_map.get_cell_position(cell, edit_layer)
 	_update_cursor_transform()
 	_update_edit_grid_transform()
 	
@@ -214,24 +224,40 @@ func _handle_input(camera: Camera3D, point: Vector2) -> int:
 		InputAction.Paint:
 			var change := ChangeItem.new()
 			change.coordinates = cell
-			change.old_item = scene_map.get_cell_item_id(cell)
-			change.old_orientation = scene_map.get_cell_item_orientation(cell)
+			change.old_item = scene_map.get_cell_item_id(cell, edit_layer)
+			change.old_orientation = scene_map.get_cell_item_orientation(cell, edit_layer)
 			change.new_item = selected_item_id
 			change.new_orientation = cursor_rotation.get_rotation_quaternion()
-			changed_items.append(change)
+			change.layer = edit_layer
 			
-			scene_map.set_cell_item(change.coordinates, change.new_item, change.new_orientation)
+			# Prevent duplicate changes
+			var last_item := changed_items[-1] if changed_items.size() > 0 else null
+			if last_item and last_item.layer == change.layer and last_item.coordinates == change.coordinates and last_item.new_item==change.new_item and last_item.new_orientation == change.new_orientation:
+				return EditorPlugin.AFTER_GUI_INPUT_STOP
+			if change.old_item == change.new_item and change.old_orientation == change.new_orientation:
+				return EditorPlugin.AFTER_GUI_INPUT_STOP
+			
+			changed_items.append(change)
+			scene_map.set_cell_item(change.coordinates, change.new_item, change.layer, change.new_orientation)
 			return EditorPlugin.AFTER_GUI_INPUT_STOP
 		InputAction.Erase:
 			var change := ChangeItem.new()
 			change.coordinates = cell
-			change.old_item = scene_map.get_cell_item_id(cell)
-			change.old_orientation = scene_map.get_cell_item_orientation(cell)
+			change.old_item = scene_map.get_cell_item_id(cell, edit_layer)
+			change.old_orientation = scene_map.get_cell_item_orientation(cell, edit_layer)
 			change.new_item = -1
 			change.new_orientation = Quaternion.IDENTITY
-			changed_items.append(change)
+			change.layer = edit_layer
 			
-			scene_map.set_cell_item(change.coordinates, change.new_item, change.new_orientation)
+			# Prevent duplicate changes
+			var last_item := changed_items[-1] if changed_items.size() > 0 else null
+			if last_item and last_item.layer == change.layer and last_item.coordinates == change.coordinates and last_item.new_item==change.new_item and last_item.new_orientation == change.new_orientation:
+				return EditorPlugin.AFTER_GUI_INPUT_STOP
+			if change.old_item == change.new_item and change.old_orientation == change.new_orientation:
+				return EditorPlugin.AFTER_GUI_INPUT_STOP
+			
+			changed_items.append(change)
+			scene_map.set_cell_item(change.coordinates, change.new_item, change.layer, change.new_orientation)
 			return EditorPlugin.AFTER_GUI_INPUT_STOP
 	
 	return EditorPlugin.AFTER_GUI_INPUT_PASS
@@ -339,6 +365,14 @@ func _floor_changed(value: float) -> void:
 	edit_floor = value
 
 
+func _layer_changed(value: float) -> void:
+	if value >= scene_map.layers.size():
+		layer_control.value = scene_map.layers.size()-1
+		edit_layer = scene_map.layers.size()-1
+		return
+	edit_layer = value
+
+
 func _item_selected(index: int) -> void:
 	var item_id := palette_list.get_item_metadata(index) as int
 	
@@ -378,7 +412,7 @@ func _menu_option_selected(option_id: int) -> void:
 			
 			# Try to keep the cursor in the same location in the new axis
 			edit_axis = new_axis
-			floor_control.value = floor(cursor_origin[edit_axis] / scene_map.cell_size[edit_axis])
+			floor_control.value = floor(cursor_origin[edit_axis] / scene_map.layers[edit_layer].cell_size[edit_axis])
 			
 			_update_grid()
 		MenuOption.Rotate_Clockwise, MenuOption.Rotate_Counter_Clockwise:
@@ -433,17 +467,17 @@ func _update_grid() -> void:
 		edit_grid.queue_free()
 		edit_grid = null
 	
-	if selected_item_id < 0 || !scene_map || !scene_map.palette || is_equal_approx(scene_map.cell_size[edit_axis], 0.0):
+	if selected_item_id < 0 || !scene_map || !scene_map.palette || scene_map.layers.size() <= edit_layer || is_equal_approx(scene_map.layers[edit_layer].cell_size[edit_axis], 0.0):
 		return
 	
 	var offset := Vector3()
-	if scene_map.cell_center_x:
+	if scene_map.layers[edit_layer].center_x:
 		offset.x -= 0.5
-	if scene_map.cell_center_y:
+	if scene_map.layers[edit_layer].center_y:
 		offset.y -= 0.5
-	if scene_map.cell_center_z:
+	if scene_map.layers[edit_layer].center_z:
 		offset.z -= 0.5
-	offset *= scene_map.cell_size
+	offset *= scene_map.layers[edit_layer].cell_size
 	
 	var grid_material := preload("grid_material.tres") as ShaderMaterial
 	var surface_tool := SurfaceTool.new()
@@ -453,24 +487,24 @@ func _update_grid() -> void:
 	var radius := 64
 	match edit_axis:
 		Vector3.AXIS_X:
-			for i in range(-radius, radius + 1, scene_map.cell_size.z):
+			for i in range(-radius, radius + 1, scene_map.layers[edit_layer].cell_size.z):
 				surface_tool.add_vertex(Vector3(0, -radius, i) + offset)
 				surface_tool.add_vertex(Vector3(0, radius, i) + offset)
-			for i in range(-radius, radius + 1, scene_map.cell_size.y):
+			for i in range(-radius, radius + 1, scene_map.layers[edit_layer].cell_size.y):
 				surface_tool.add_vertex(Vector3(0, i, -radius) + offset)
 				surface_tool.add_vertex(Vector3(0, i, radius) + offset)
 		Vector3.AXIS_Y:
-			for i in range(-radius, radius + 1, scene_map.cell_size.z):
+			for i in range(-radius, radius + 1, scene_map.layers[edit_layer].cell_size.z):
 				surface_tool.add_vertex(Vector3(-radius, 0, i) + offset)
 				surface_tool.add_vertex(Vector3(radius, 0, i) + offset)
-			for i in range(-radius, radius + 1, scene_map.cell_size.x):
+			for i in range(-radius, radius + 1, scene_map.layers[edit_layer].cell_size.x):
 				surface_tool.add_vertex(Vector3(i, 0, -radius) + offset)
 				surface_tool.add_vertex(Vector3(i, 0, radius) + offset)
 		Vector3.AXIS_Z:
-			for i in range(-radius, radius + 1, scene_map.cell_size.y):
+			for i in range(-radius, radius + 1, scene_map.layers[edit_layer].cell_size.y):
 				surface_tool.add_vertex(Vector3(-radius, i, 0) + offset)
 				surface_tool.add_vertex(Vector3(radius, i, 0) + offset)
-			for i in range(-radius, radius + 1, scene_map.cell_size.x):
+			for i in range(-radius, radius + 1, scene_map.layers[edit_layer].cell_size.x):
 				surface_tool.add_vertex(Vector3(i, -radius, 0) + offset)
 				surface_tool.add_vertex(Vector3(i, radius, 0) + offset)
 	
@@ -483,9 +517,17 @@ func _update_grid() -> void:
 	_update_edit_grid_transform()
 
 
+func _update_layer() -> void:
+	if edit_layer >= scene_map.layers.size():
+		edit_layer = scene_map.layers.size()-1
+		layer_control.value = edit_layer
+	return
+
+
 class ChangeItem:
 	var coordinates: Vector3
-	var new_item: int
-	var new_orientation: Quaternion
-	var old_item: int
-	var old_orientation: Quaternion
+	var new_item: int = -1
+	var new_orientation: Quaternion = Quaternion.IDENTITY
+	var old_item: int = -1
+	var old_orientation: Quaternion = Quaternion.IDENTITY
+	var layer : int = 0

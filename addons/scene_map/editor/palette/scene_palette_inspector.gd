@@ -2,18 +2,13 @@
 extends EditorInspectorPlugin
 
 
-const ScenePalette = preload("../../scene_palette.gd")
-
-
 func _can_handle(object: Object) -> bool:
 	if object is ScenePalette:
 		return true
-	
 	return false
 
 
 func _parse_property(object: Object, type: Variant.Type, path: String, hint: PropertyHint, hint_text: String, usage: int, wide : bool) -> bool:
-	#print("We're using the inspector plugin")
 	var palette := object as ScenePalette
 	if path.begins_with("items/"):
 		var parts := path.split("/")
@@ -30,7 +25,6 @@ func _parse_property(object: Object, type: Variant.Type, path: String, hint: Pro
 				add_button.text = tr("Add Item")
 				add_button.pressed.connect(palette.create_item)
 				add_custom_control(add_button)
-				
 				return true
 			"remove_item":
 				var remove_button := Button.new()
@@ -38,5 +32,4 @@ func _parse_property(object: Object, type: Variant.Type, path: String, hint: Pro
 				remove_button.pressed.connect(palette.remove_item.bind(item_id))
 				add_custom_control(remove_button)
 				return true
-	#print("returned false")
 	return false
