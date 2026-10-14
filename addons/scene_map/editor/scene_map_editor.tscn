@@ -163,7 +163,7 @@ item_0/text = "Example Item"
 
 [connection signal="value_changed" from="Layout/Toolbar/LayerContainer/LayerBox" to="." method="_layer_changed"]
 [connection signal="value_changed" from="Layout/Toolbar/FloorContainer/FloorBox" to="." method="_floor_changed"]
-[connection signal="text_changed" from="Layout/SearchBar/Search" to="Layout" method="_search_text_changed"]
+[connection signal="text_changed" from="Layout/SearchBar/Search" to="." method="_search_text_changed"]
 [connection signal="pressed" from="Layout/SearchBar/Thumbnail" to="." method="_set_display_mode" binds= [0]]
 [connection signal="pressed" from="Layout/SearchBar/List" to="." method="_set_display_mode" binds= [1]]
-[connection signal="item_selected" from="Layout/Scroll/Palette" to="Layout" method="_item_selected"]
+[connection signal="item_selected" from="Layout/Scroll/Palette" to="." method="_item_selected"]

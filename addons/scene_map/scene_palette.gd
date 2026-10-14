@@ -5,7 +5,7 @@ class_name ScenePalette
 extends Resource
 
 
-var item_map := []
+@export var item_map : Array[SceneItem] = []
 
 
 func _init() -> void:
@@ -65,44 +65,53 @@ func _get(property: StringName):
 		return null
 
 
-func _get_property_list() -> Array[Dictionary]:
-	var props : Array[Dictionary] = [
-		{
-			"name": "ScenePalette",
-			"type": TYPE_NIL,
-			"usage": PROPERTY_USAGE_CATEGORY
-		}
-	]
+#func _get_property_list() -> Array[Dictionary]:
+	#var props : Array[Dictionary] = [
+		#{
+			#"name": "ScenePalette",
+			#"type": TYPE_NIL,
+			#"usage": PROPERTY_USAGE_CATEGORY
+		#},
+		#{
+			#"name": "palette",
+			#"type": TYPE_OBJECT
+		#}
+	#]
 	
-	for item_id in item_map.size():
-		var prefix = "items/%d/" % item_id
-		props.append({ 
-			"name": prefix + "name", 
-			"type": TYPE_STRING
-		})
-		props.append({ 
-			"name": prefix + "scene", 
-			"type": TYPE_OBJECT, 
-			"hint": PROPERTY_HINT_RESOURCE_TYPE, 
-			"hint_string": "PackedScene" 
-		})
-		props.append({
-			"name": prefix + "remove_item",
-			"type": TYPE_NIL,
-			"usage": PROPERTY_USAGE_EDITOR
-		})
+	#for item_id in item_map.size():
+		#var prefix = "items/%d/" % item_id
+		#props.append({ 
+			#"name": prefix + "name", 
+			#"type": TYPE_STRING
+		#})
+		#props.append({ 
+			#"name": prefix + "scene", 
+			#"type": TYPE_OBJECT, 
+			#"hint": PROPERTY_HINT_RESOURCE_TYPE, 
+			#"hint_string": "PackedScene" 
+		#})
+		#props.append({
+			#"name": prefix + "remove_item",
+			#"type": TYPE_NIL,
+			#"usage": PROPERTY_USAGE_EDITOR
+		#})
+	#
+	#props.append({
+		#"name": "add_item",
+		#"type": TYPE_NIL,
+		#"usage": PROPERTY_USAGE_EDITOR
+	#})
 	
-	props.append({
-		"name": "items/%d/add_item" % get_next_available_id(),
-		"type": TYPE_NIL,
-		"usage": PROPERTY_USAGE_EDITOR
-	})
-	
-	return props
+	#return props
 
 
 func create_item() -> void:
 	item_map.append(Item.new())
+	_emit_changed()
+
+
+func insert_item(index : int) -> void:
+	item_map.insert(index, Item.new())
 	_emit_changed()
 
 
