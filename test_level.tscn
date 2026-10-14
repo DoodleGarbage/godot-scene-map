@@ -5,7 +5,7 @@
 [ext_resource type="Resource" path="res://test_scene_palette.tres" id="3"]
 [ext_resource type="PackedScene" path="res://tiles/floor_tile.tscn" id="4"]
 [ext_resource type="PackedScene" path="res://tiles/block_tile.tscn" id="5"]
-[ext_resource type="PackedScene" path="res://tiles/fire_tile.tscn" id="6"]
+[ext_resource type="PackedScene" uid="uid://baagc1mix2la6" path="res://tiles/fire_tile.tscn" id="6"]
 [ext_resource type="PackedScene" path="res://tiles/triangle_tile.tscn" id="7"]
 
 [node name="Spatial" type="Node3D" unique_id=486782438]

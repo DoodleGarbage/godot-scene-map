@@ -15,7 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- Updated script synatax to Godot 4.x
+- Updated script synatax to Godot 4.x; This includes directly using Signals instead of StringNames and updating to use the new conventions for plugins and node methods.
 
 ## [0.6] - 2021-08-11
 
