@@ -34,7 +34,6 @@ var palette : ScenePalette :
 
 func _on_palette_changed():
 	palette_changed.emit(palette)
-	#emit_signal("palette_changed", palette)
 	_rebuild()
 
 var layers : Array[Layer] = [Layer.new()]
@@ -42,7 +41,7 @@ var layers : Array[Layer] = [Layer.new()]
 # Whether a layout is currently pending.
 var layout_pending: bool = false
 
-# Used to undoing/redoing edits to the layer. Prevents losing everything if you mis-click remove layer.
+# Used for undoing/redoing edits to the layer. Prevents losing everything if you mis-click remove layer.
 var undoredo := UndoRedo.new()
 
 func _set(property: StringName, value : Variant) -> bool:
@@ -57,7 +56,7 @@ func _set(property: StringName, value : Variant) -> bool:
 		
 		if not layers.size() > layer_id:
 			for i in range(layers.size(), layer_id+1):
-				## Create new items until we get to the item_id we were trying to access
+				## Create new layers until we get to the item_id we were trying to access
 				create_layer()
 		
 		match prop:

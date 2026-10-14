@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://di7lufebwfcmf" path="res://addons/scene_map/scene_map.gd" id="1"]
 [ext_resource type="MeshLibrary" uid="uid://5s2fwd0hu56e" path="res://test_mesh_library.tres" id="2"]
+[ext_resource type="Resource" uid="uid://bspblu1fnvlhu" path="res://test_scene_palette.tres" id="3_y646j"]
 [ext_resource type="PackedScene" path="res://tiles/floor_tile.tscn" id="4"]
 [ext_resource type="PackedScene" path="res://tiles/block_tile.tscn" id="5"]
 [ext_resource type="PackedScene" uid="uid://baagc1mix2la6" path="res://tiles/fire_tile.tscn" id="6"]
@@ -17,6 +18,17 @@ data = {
 
 [node name="SceneMap" type="Node3D" parent="." unique_id=696092525]
 script = ExtResource("1")
+palette = ExtResource("3_y646j")
+layers/0/size = Vector3(2, 2, 2)
+layers/0/center_x = true
+layers/0/center_y = true
+layers/0/center_z = true
+layers/0/cell_map = null
+layers/1/size = Vector3(2, 2, 2)
+layers/1/center_x = true
+layers/1/center_y = true
+layers/1/center_z = true
+layers/1/cell_map = null
 
 [node name="fire_tile" parent="SceneMap" unique_id=2044379638 instance=ExtResource("6")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13, 1, 3)

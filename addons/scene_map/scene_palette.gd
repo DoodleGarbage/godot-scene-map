@@ -65,46 +65,6 @@ func _get(property: StringName):
 		return null
 
 
-#func _get_property_list() -> Array[Dictionary]:
-	#var props : Array[Dictionary] = [
-		#{
-			#"name": "ScenePalette",
-			#"type": TYPE_NIL,
-			#"usage": PROPERTY_USAGE_CATEGORY
-		#},
-		#{
-			#"name": "palette",
-			#"type": TYPE_OBJECT
-		#}
-	#]
-	
-	#for item_id in item_map.size():
-		#var prefix = "items/%d/" % item_id
-		#props.append({ 
-			#"name": prefix + "name", 
-			#"type": TYPE_STRING
-		#})
-		#props.append({ 
-			#"name": prefix + "scene", 
-			#"type": TYPE_OBJECT, 
-			#"hint": PROPERTY_HINT_RESOURCE_TYPE, 
-			#"hint_string": "PackedScene" 
-		#})
-		#props.append({
-			#"name": prefix + "remove_item",
-			#"type": TYPE_NIL,
-			#"usage": PROPERTY_USAGE_EDITOR
-		#})
-	#
-	#props.append({
-		#"name": "add_item",
-		#"type": TYPE_NIL,
-		#"usage": PROPERTY_USAGE_EDITOR
-	#})
-	
-	#return props
-
-
 func create_item() -> void:
 	item_map.append(Item.new())
 	_emit_changed()
@@ -169,7 +129,6 @@ func set_item_scene(item_id: int, scene: PackedScene) -> void:
 		return
 	
 	if not item_map.size() > item_id:
-		#print_stack()
 		push_error("Item %s ID is not present in palette." % item_id)
 		return
 	

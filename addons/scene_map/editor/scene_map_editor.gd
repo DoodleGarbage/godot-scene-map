@@ -349,8 +349,6 @@ func _update_palette(palette: ScenePalette) -> void:
 		var scene := palette.get_item_scene(item_id)
 		if scene:
 			previewer.queue_resource_preview(scene.resource_path, self, "_thumbnail_result", item_id)
-		
-		#item_count = item_count + 1
 	
 	if selected_item_index >= 0:
 		palette_list.select(selected_item_index)

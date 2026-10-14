@@ -22,6 +22,8 @@ func _enter_tree() -> void:
 	
 	scene_map_editor = preload("editor/scene_map_editor.tscn").instantiate()
 	scene_map_editor.plugin = self
+	
+	## Use this to add a control to the viewport
 	#add_control_to_container(EditorPlugin.CONTAINER_SPATIAL_EDITOR_SIDE_RIGHT, scene_map_editor)
 	add_dock(scene_map_editor)
 	scene_map_editor.hide()
@@ -50,11 +52,9 @@ func _handles(object: Object) -> bool:
 func _make_visible(visible: bool) -> void:
 	if visible:
 		scene_map_editor.make_visible()
-		#scene_map_editor.show()
 	else:
 		scene_map_editor.edit(null)
 		scene_map_editor.close()
-		#scene_map_editor.hide()
 
 
 func _forward_3d_gui_input(camera: Camera3D, event: InputEvent) -> int:
