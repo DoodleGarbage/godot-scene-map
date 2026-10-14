@@ -7,9 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [1.0] - 2026-10-13
+## [0.7] - 2026-10-13
 
 ### Changed
+
+- Godot 4.x release.
 
 - Converted ScenePalette's tile_map to an Array, as the previous Dictionary implementation had indexing errors.
 
