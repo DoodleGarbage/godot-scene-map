@@ -178,6 +178,10 @@ func _get_property_list() -> Array[Dictionary]:
 # @param p_orientation Quaternion specifying how the item is oriented.
 # @returns True if the item was removed or placed, false if item was already present when placing.
 func set_cell_item(p_coordinate: Vector3, p_item_id: int, layer:int, p_orientation: Quaternion = Quaternion.IDENTITY) -> bool:
+	if layer >= layers.size():
+		push_error("Tried to set cell on a layer (%d) that doesn't exist." % layer)
+		return false
+	
 	var coordinate = p_coordinate.floor()
 	
 	if get_cell_item_id(coordinate, layer) == p_item_id && get_cell_item_orientation(coordinate, layer).is_equal_approx(p_orientation):
